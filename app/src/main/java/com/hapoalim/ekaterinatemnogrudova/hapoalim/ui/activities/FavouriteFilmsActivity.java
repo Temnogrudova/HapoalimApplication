@@ -36,15 +36,8 @@ public class FavouriteFilmsActivity extends AppCompatActivity implements FilmsLi
         mBinder.favouriteFilmsList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mAdapter = new FilmsListAdapter(mFilms, this, this, Constants.SCREEN.ACTIVITY_FAVOURITE_FILMS);
         mBinder.favouriteFilmsList.setAdapter(mAdapter);
-
     }
 
-
-    public void removeIconFromToolBar() {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
-    }
 
     public void addBackToToolBar() {
         if (getSupportActionBar() != null) {
@@ -55,13 +48,8 @@ public class FavouriteFilmsActivity extends AppCompatActivity implements FilmsLi
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
-            removeIconFromToolBar();
-            mBinder.toolBar.setTitle(getString(R.string.activity_films_tool_bar_title));
-        } else {
-            super.onBackPressed();
-        }
+        setResult(RESULT_OK, null);
+        finish();
     }
 
     @Override

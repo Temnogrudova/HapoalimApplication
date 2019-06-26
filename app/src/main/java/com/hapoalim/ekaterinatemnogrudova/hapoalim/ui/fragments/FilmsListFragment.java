@@ -1,5 +1,6 @@
 package com.hapoalim.ekaterinatemnogrudova.hapoalim.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -26,7 +27,7 @@ import static com.hapoalim.ekaterinatemnogrudova.hapoalim.utils.Constants.SCREEN
 import static com.hapoalim.ekaterinatemnogrudova.hapoalim.utils.Constants.SCREEN.FRAGMENT_FILMS;
 
 public class FilmsListFragment extends Fragment  implements FilmsListContract.View, FilmsListAdapter.IFilmClicked {
-    protected FragmentListFilmsBinding mBinder;
+    public FragmentListFilmsBinding mBinder;
     private FilmsListContract.Presenter mPresenter;
     private List<Film> mFilms = new ArrayList<>();
     private FilmsListAdapter mAdapter;
@@ -66,6 +67,7 @@ public class FilmsListFragment extends Fragment  implements FilmsListContract.Vi
         }
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public void onFilmClick(Film currentFilm) {
         FilmFragment filmFragment = FilmFragment.newInstance();
@@ -74,6 +76,7 @@ public class FilmsListFragment extends Fragment  implements FilmsListContract.Vi
         filmItem.putString( FRAGMENT_FILM.name(), gson.toJson(currentFilm));
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
         if (filmItem != null) {
             filmFragment.setArguments(filmItem);
         }
@@ -106,10 +109,8 @@ public class FilmsListFragment extends Fragment  implements FilmsListContract.Vi
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-
                 if (!isLoading) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == mFilms.size() - 1) {
+                    if (!recyclerView.canScrollVertically(1)) {
                         page++;
                         getFilms();
                         isLoading = true;

@@ -12,6 +12,7 @@ import com.hapoalim.ekaterinatemnogrudova.hapoalim.R;
 import com.hapoalim.ekaterinatemnogrudova.hapoalim.databinding.ActivityFilmsBinding;
 import com.hapoalim.ekaterinatemnogrudova.hapoalim.ui.fragments.FilmsListFragment;
 
+import static com.hapoalim.ekaterinatemnogrudova.hapoalim.utils.Constants.REQUEST_CODE;
 import static com.hapoalim.ekaterinatemnogrudova.hapoalim.utils.Constants.SCREEN.FRAGMENT_FILMS;
 
 
@@ -37,9 +38,12 @@ public class FilmsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent myIntent = new Intent(FilmsActivity.this,
                         FavouriteFilmsActivity.class);
-                startActivity(myIntent);
+                startActivityForResult(myIntent, REQUEST_CODE);
             }
         });
+    }
+    private boolean isFilmFragmentListShown(){
+        return getFragmentManager().findFragmentById(R.id.fragment_container) == getFragmentManager().findFragmentByTag(FRAGMENT_FILMS.name());
     }
 
     public void removeIconFromToolBar() {
@@ -55,7 +59,6 @@ public class FilmsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white);
             mBinder.ibFavourites.setVisibility(View.GONE);
-
         }
     }
 
@@ -63,8 +66,7 @@ public class FilmsActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
-            if (getFragmentManager().findFragmentById(R.id.fragment_container) ==
-                    getFragmentManager().findFragmentByTag(FRAGMENT_FILMS.name())) {
+            if (isFilmFragmentListShown()) {
                 finish();
             }
             else{
@@ -84,5 +86,13 @@ public class FilmsActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            if (isFilmFragmentListShown()) {
+                ((FilmsListFragment) getFragmentManager().findFragmentByTag(FRAGMENT_FILMS.name())).mBinder.filmsList.getAdapter().notifyDataSetChanged();
+            }
+        }
     }
 }
