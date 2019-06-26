@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">HapolimTestApplication</string>
+    <string name="activity_films_tool_bar_title">Latest Movies</string>
+    <string name="activity_favourite_films_tool_bar_title">Favourite Movies</string>
+    <string name="fragment_film_date">Date: %1$s</string>
+    <string name="fragment_film_rating">Rating: %1$s</string>
+</resources>
