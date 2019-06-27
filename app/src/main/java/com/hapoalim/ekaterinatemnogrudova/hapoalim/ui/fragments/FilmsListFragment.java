@@ -80,7 +80,7 @@ public class FilmsListFragment extends Fragment  implements FilmsListContract.Vi
         if (filmItem != null) {
             filmFragment.setArguments(filmItem);
         }
-        fragmentTransaction.replace(R.id.fragment_container, filmFragment, FRAGMENT_FILM.name());
+        fragmentTransaction.add(R.id.fragment_container, filmFragment, FRAGMENT_FILM.name());
         fragmentTransaction.addToBackStack(FRAGMENT_FILM.name());
         fragmentTransaction.commitAllowingStateLoss();
     }
